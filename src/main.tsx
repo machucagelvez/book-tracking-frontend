@@ -1,11 +1,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+
+import { BooksTrackingApp } from "./BooksTrackingApp";
+
 import "./index.css";
-import { Button } from "./components/ui/button";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <h1>Bibliógrafo</h1>
-    <Button>Botón</Button>
+    <BooksTrackingApp />
   </StrictMode>,
 );
