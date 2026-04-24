@@ -1,9 +1,16 @@
 import { BookGrid } from "@/books/components/BookGrid";
 import { CustomHeader } from "@/components/custom/CustomHeader";
+import { CustomPagination } from "@/components/custom/CustomPagination";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus } from "lucide-react";
+import { useState } from "react";
 
 export const HomePage = () => {
+  const [activeTab, setActiveTab] = useState<
+    "reading" | "readed" | "pending" | "dropped"
+  >("reading");
+
   return (
     <>
       <CustomHeader />
@@ -26,86 +33,54 @@ export const HomePage = () => {
           </Button>
         </div>
 
-        <BookGrid />
+        <Tabs value={activeTab} className="mb-8">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger
+              value="reading"
+              onClick={() => setActiveTab("reading")}
+            >
+              Leyendo (3)
+            </TabsTrigger>
+            <TabsTrigger value="readed" onClick={() => setActiveTab("readed")}>
+              Leídos (5)
+            </TabsTrigger>
+            <TabsTrigger
+              value="pending"
+              onClick={() => setActiveTab("pending")}
+            >
+              Pendientes (2)
+            </TabsTrigger>
+            <TabsTrigger
+              value="dropped"
+              onClick={() => setActiveTab("dropped")}
+            >
+              Abandonados (1)
+            </TabsTrigger>
+          </TabsList>
 
-        {/* {!ready ? (
-          <div className="text-muted-foreground">Cargando…</div>
-        ) : (
-          <div className="space-y-12">
-            {STATUS_ORDER.map((status) => {
-              const list = grouped[status];
-              const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
-              const currentPage = Math.min(pages[status], totalPages);
-              const start = (currentPage - 1) * PAGE_SIZE;
-              const visible = list.slice(start, start + PAGE_SIZE);
+          <TabsContent value="reading">
+            <h1>Leyendo</h1>
+            {/* Mostrar todos los libros en estado leyendo */}
+            <BookGrid />
+          </TabsContent>
+          <TabsContent value="readed">
+            <h1>Leídos</h1>
+            {/* Mostrar todos los leídos */}
+            <BookGrid />
+          </TabsContent>
+          <TabsContent value="pending">
+            <h1>Pendientes</h1>
+            {/* Mostrar todos los pendientes */}
+            <BookGrid />
+          </TabsContent>
+          <TabsContent value="dropped">
+            <h1>Abandonados</h1>
+            {/* Mostrar todos los abandonados */}
+            <BookGrid />
+          </TabsContent>
+        </Tabs>
 
-              return (
-                <section key={status} aria-labelledby={`section-${status}`}>
-                  <div className="mb-4 flex items-baseline gap-3">
-                    <span
-                      className="h-2 w-2 rounded-full"
-                      style={{ backgroundColor: `hsl(var(--${STATUS_META[status].colorVar}))` }}
-                      aria-hidden
-                    />
-                    <h2
-                      id={`section-${status}`}
-                      className="text-lg font-semibold tracking-tight"
-                    >
-                      {STATUS_META[status].label}
-                    </h2>
-                    <span className="text-sm text-muted-foreground">
-                      {list.length}
-                    </span>
-                  </div>
-
-                  {list.length === 0 ? (
-                    <p className="rounded-lg border border-dashed border-border px-4 py-6 text-sm text-muted-foreground">
-                      Sin libros en esta categoría todavía.
-                    </p>
-                  ) : (
-                    <>
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                        {visible.map((book) => (
-                          <BookCard
-                            key={book.id}
-                            book={book}
-                            onToggleFavorite={toggleFavorite}
-                          />
-                        ))}
-                      </div>
-
-                      {totalPages > 1 && (
-                        <div className="mt-6 flex items-center justify-end gap-2">
-                          <span className="mr-1 text-xs text-muted-foreground">
-                            Página {currentPage} de {totalPages}
-                          </span>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            aria-label="Página anterior"
-                            disabled={currentPage === 1}
-                            onClick={() => setPage(status, currentPage - 1)}
-                          >
-                            <ChevronLeft className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            aria-label="Página siguiente"
-                            disabled={currentPage === totalPages}
-                            onClick={() => setPage(status, currentPage + 1)}
-                          >
-                            <ChevronRight className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </section>
-              );
-            })}
-          </div>
-        )} */}
+        <CustomPagination totalPages={5} />
       </main>
 
       {/* <AddBookDialog open={open} onOpenChange={setOpen} onAdd={addBook} /> */}
