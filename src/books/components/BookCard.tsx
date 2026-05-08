@@ -43,54 +43,5 @@ export const BookCard = () => {
         </div>
       </CardHeader>
     </Card>
-    // <div>
-    //   <div className="relative overflow-hidden rounded-lg bg-muted shadow-sm transition-base group-hover:shadow-card">
-    //     <div className="aspect-[2/3] w-full">
-    //       {book.coverUrl ? (
-    //         <img
-    //           src={book.coverUrl}
-    //           alt={`Portada de ${book.title}`}
-    //           loading="lazy"
-    //           className="h-full w-full object-cover transition-base group-hover:scale-[1.03]"
-    //           onError={(e) => {
-    //             (e.currentTarget as HTMLImageElement).style.display = "none";
-    //           }}
-    //         />
-    //       ) : (
-    //         <div className="flex h-full w-full items-center justify-center bg-secondary text-muted-foreground">
-    //           <BookOpen className="h-10 w-10" strokeWidth={1.25} />
-    //         </div>
-    //       )}
-    //     </div>
-
-    //     <button
-    //       type="button"
-    //       aria-label={
-    //         book.favorite ? "Quitar de favoritos" : "Marcar como favorito"
-    //       }
-    //       aria-pressed={book.favorite}
-    //       className="absolute right-2 top-2 grid h-9 w-9 place-items-center rounded-full bg-background/90 shadow-sm backdrop-blur transition-base hover:scale-105"
-    //     >
-    //       <Heart
-    //         className={cn(
-    //           "h-4 w-4 transition-base",
-    //           book.favorite
-    //             ? "fill-highlight text-highlight"
-    //             : "text-foreground",
-    //         )}
-    //         strokeWidth={2}
-    //       />
-    //     </button>
-    //   </div>
-
-    //   <div className="mt-3 space-y-0.5">
-    //     <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-foreground">
-    //       {book.title}
-    //     </h3>
-    //     <p className="line-clamp-1 text-xs text-muted-foreground">
-    //       {book.author}
-    //     </p>
-    //   </div>
-    // </div>
   );
 };
