@@ -1,6 +1,11 @@
+import type { UserBook } from "../types/user-book.interface";
 import { BookCard } from "./BookCard";
 
-export const BookGrid = () => {
+interface Props {
+  userBooks: UserBook[];
+}
+
+export const BookGrid = ({ userBooks }: Props) => {
   return (
     <section key={status} aria-labelledby={`section-${status}`}>
       {/* <div className="mb-4 flex items-baseline gap-3">
@@ -19,12 +24,9 @@ export const BookGrid = () => {
                     </p> */}
 
       <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-        <BookCard />
-        <BookCard />
-        <BookCard />
-        <BookCard />
-        <BookCard />
-        <BookCard />
+        {userBooks.map((book) => (
+          <BookCard key={book.userBookId} book={book} />
+        ))}
       </div>
     </section>
   );

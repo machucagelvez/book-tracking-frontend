@@ -1,15 +1,25 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getBooksByUserAction } from "@/books/actions/get-books-by-user.action";
 import { BookGrid } from "@/books/components/BookGrid";
 import { CustomHeader } from "@/components/custom/CustomHeader";
 import { CustomPagination } from "@/components/custom/CustomPagination";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus } from "lucide-react";
-import { useState } from "react";
 
 export const HomePage = () => {
   const [activeTab, setActiveTab] = useState<
     "reading" | "readed" | "pending" | "dropped"
   >("reading");
+
+  const { data: userBooksData } = useQuery({
+    queryKey: ["user-books"],
+    queryFn: () => getBooksByUserAction(),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  console.log(userBooksData);
 
   return (
     <>
@@ -61,22 +71,22 @@ export const HomePage = () => {
           <TabsContent value="reading">
             <h1>Leyendo</h1>
             {/* Mostrar todos los libros en estado leyendo */}
-            <BookGrid />
+            <BookGrid userBooks={userBooksData?.userBooks ?? []} />
           </TabsContent>
           <TabsContent value="readed">
             <h1>Leídos</h1>
             {/* Mostrar todos los leídos */}
-            <BookGrid />
+            <BookGrid userBooks={userBooksData?.userBooks ?? []} />
           </TabsContent>
           <TabsContent value="pending">
             <h1>Pendientes</h1>
             {/* Mostrar todos los pendientes */}
-            <BookGrid />
+            <BookGrid userBooks={userBooksData?.userBooks ?? []} />
           </TabsContent>
           <TabsContent value="dropped">
             <h1>Abandonados</h1>
             {/* Mostrar todos los abandonados */}
-            <BookGrid />
+            <BookGrid userBooks={userBooksData?.userBooks ?? []} />
           </TabsContent>
         </Tabs>
 
