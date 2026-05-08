@@ -1,15 +1,24 @@
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookGrid } from "@/books/components/BookGrid";
 import { CustomHeader } from "@/components/custom/CustomHeader";
 import { CustomPagination } from "@/components/custom/CustomPagination";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus } from "lucide-react";
-import { useState } from "react";
+import { usePaginatedBook } from "@/books/hooks/usePaginatedBook";
+import { useBookSummary } from "@/books/hooks/useBookSummary";
+import { useHomePageParams } from "@/books/hooks/useHomePageParams";
 
 export const HomePage = () => {
-  const [activeTab, setActiveTab] = useState<
-    "reading" | "readed" | "pending" | "dropped"
-  >("reading");
+  const { setSearchParams, page, limit, readingStatus, selectedTab } =
+    useHomePageParams();
+
+  const { data: userBooksData } = usePaginatedBook(
+    +page,
+    +limit,
+    readingStatus,
+  );
+
+  const { data: summaryData } = useBookSummary();
 
   return (
     <>
@@ -21,10 +30,6 @@ export const HomePage = () => {
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
               Mi biblioteca
             </h1>
-            <p className="mt-1.5 text-sm text-muted-foreground">
-              {/* {books.length} {books.length === 1 ? "libro" : "libros"} */}#
-              libros en total
-            </p>
           </div>
           <Button className="shrink-0">
             <Plus className="h-4 w-4" />
@@ -33,54 +38,88 @@ export const HomePage = () => {
           </Button>
         </div>
 
-        <Tabs value={activeTab} className="mb-8">
-          <TabsList className="grid w-full grid-cols-4">
+        <Tabs value={selectedTab} className="mb-8">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger
+              value="all"
+              onClick={() =>
+                setSearchParams((prev) => {
+                  prev.delete("reading_status");
+                  prev.set("tab", "all");
+                  return prev;
+                })
+              }
+            >
+              Todos ({summaryData?.total ?? 0})
+            </TabsTrigger>
             <TabsTrigger
               value="reading"
-              onClick={() => setActiveTab("reading")}
+              onClick={() =>
+                setSearchParams((prev) => {
+                  prev.set("tab", "reading");
+                  prev.set("reading_status", "reading");
+                  return prev;
+                })
+              }
             >
-              Leyendo (3)
+              Leyendo ({summaryData?.reading ?? 0})
             </TabsTrigger>
-            <TabsTrigger value="readed" onClick={() => setActiveTab("readed")}>
-              Leídos (5)
+            <TabsTrigger
+              value="readed"
+              onClick={() =>
+                setSearchParams((prev) => {
+                  prev.set("tab", "readed");
+                  prev.set("reading_status", "completed");
+                  return prev;
+                })
+              }
+            >
+              Leídos ({summaryData?.completed ?? 0})
             </TabsTrigger>
             <TabsTrigger
               value="pending"
-              onClick={() => setActiveTab("pending")}
+              onClick={() =>
+                setSearchParams((prev) => {
+                  prev.set("tab", "pending");
+                  prev.set("reading_status", "pending");
+                  return prev;
+                })
+              }
             >
-              Pendientes (2)
+              Pendientes ({summaryData?.pending ?? 0})
             </TabsTrigger>
             <TabsTrigger
               value="dropped"
-              onClick={() => setActiveTab("dropped")}
+              onClick={() =>
+                setSearchParams((prev) => {
+                  prev.set("tab", "dropped");
+                  prev.set("reading_status", "dropped");
+                  return prev;
+                })
+              }
             >
-              Abandonados (1)
+              Abandonados ({summaryData?.dropped ?? 0})
             </TabsTrigger>
           </TabsList>
 
+          <TabsContent value="all">
+            <BookGrid userBooks={userBooksData?.userBooks ?? []} />
+          </TabsContent>
           <TabsContent value="reading">
-            <h1>Leyendo</h1>
-            {/* Mostrar todos los libros en estado leyendo */}
-            <BookGrid />
+            <BookGrid userBooks={userBooksData?.userBooks ?? []} />
           </TabsContent>
           <TabsContent value="readed">
-            <h1>Leídos</h1>
-            {/* Mostrar todos los leídos */}
-            <BookGrid />
+            <BookGrid userBooks={userBooksData?.userBooks ?? []} />
           </TabsContent>
           <TabsContent value="pending">
-            <h1>Pendientes</h1>
-            {/* Mostrar todos los pendientes */}
-            <BookGrid />
+            <BookGrid userBooks={userBooksData?.userBooks ?? []} />
           </TabsContent>
           <TabsContent value="dropped">
-            <h1>Abandonados</h1>
-            {/* Mostrar todos los abandonados */}
-            <BookGrid />
+            <BookGrid userBooks={userBooksData?.userBooks ?? []} />
           </TabsContent>
         </Tabs>
 
-        <CustomPagination totalPages={5} />
+        <CustomPagination totalPages={userBooksData?.pages ?? 1} />
       </main>
 
       {/* <AddBookDialog open={open} onOpenChange={setOpen} onAdd={addBook} /> */}
