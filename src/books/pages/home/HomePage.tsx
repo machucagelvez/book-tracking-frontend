@@ -7,10 +7,12 @@ import { CustomPagination } from "@/components/custom/CustomPagination";
 import { usePaginatedBook } from "@/books/hooks/usePaginatedBook";
 import { useBookSummary } from "@/books/hooks/useBookSummary";
 import { useHomePageParams } from "@/books/hooks/useHomePageParams";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 export const HomePage = () => {
   const { setSearchParams, page, limit, readingStatus, selectedTab } =
     useHomePageParams();
+  const { user } = useAuthStore();
 
   const { data: userBooksData } = usePaginatedBook(
     +page,
@@ -28,7 +30,7 @@ export const HomePage = () => {
         <div className="mb-8 flex items-end justify-between gap-4 sm:mb-12">
           <div>
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              Mi biblioteca
+              Biblioteca de {user?.firstName} {user?.lastName}
             </h1>
           </div>
           <Button className="shrink-0">

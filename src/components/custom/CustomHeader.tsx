@@ -1,8 +1,18 @@
 import { BookMarked, LogOut } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "../ui/button";
+import { useAuthStore } from "@/auth/store/auth.store";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const CustomHeader = () => {
+  const { logout } = useAuthStore();
+  const queryClient = useQueryClient();
+
+  const handleLogout = () => {
+    logout();
+    queryClient.clear();
+  };
+
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur">
       <div className="container flex h-14 items-center justify-between">
@@ -18,10 +28,17 @@ export const CustomHeader = () => {
               {user.name}
             </span>
           )} */}
-          <Button variant="ghost" size="sm" aria-label="Cerrar sesión">
-            <LogOut className="h-4 w-4" />
-            <span className="ml-1.5 hidden sm:inline">Salir</span>
-          </Button>
+          <Link to="/auth/login">
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-label="Cerrar sesión"
+              onClick={handleLogout}
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="ml-1.5 hidden sm:inline">Salir</span>
+            </Button>
+          </Link>
         </div>
       </div>
     </header>

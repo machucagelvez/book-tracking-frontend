@@ -1,4 +1,4 @@
-import { bookApi } from "../api/book.api";
+import { bookApi } from "../../api/book.api";
 import type { UserBookResponse } from "../types/get-user-book.response";
 
 export const getBooksByUserAction = async (

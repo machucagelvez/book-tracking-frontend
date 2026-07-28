@@ -1,4 +1,4 @@
-import { bookApi } from "../api/book.api";
+import { bookApi } from "../../api/book.api";
 import type { SummaryResponse } from "../types/summary.response";
 
 export const getSummaryAction = async () => {
